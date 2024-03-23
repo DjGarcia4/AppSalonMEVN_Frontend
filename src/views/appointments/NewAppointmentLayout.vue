@@ -21,7 +21,7 @@
       >Appointment and Summary</RouterLink
     >
   </nav>
-  <main>
+  <main class="space-y-5">
     <RouterView />
   </main>
 </template>

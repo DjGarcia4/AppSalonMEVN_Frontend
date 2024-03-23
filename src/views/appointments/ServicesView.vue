@@ -15,5 +15,6 @@
 <script setup>
 import { useServicesStore } from "@/stores/services";
 import ServiceItem from "@/components/ServiceItem.vue";
+
 const services = useServicesStore();
 </script>
