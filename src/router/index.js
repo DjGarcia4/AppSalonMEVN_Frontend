@@ -17,7 +17,6 @@ const router = createRouter({
       children: [
         {
           path: "new",
-
           component: () =>
             import("../views/appointments/NewAppointmentLayout.vue"),
           children: [
@@ -33,6 +32,28 @@ const router = createRouter({
                 import("../views/appointments/AppointmentView.vue"),
             },
           ],
+        },
+      ],
+    },
+    {
+      path: "/auth",
+      name: "auth",
+      component: () => import("../views/auth/AuthLayout.vue"),
+      children: [
+        {
+          path: "register",
+          name: "register",
+          component: () => import("../views/auth/RegisterView.vue"),
+        },
+        {
+          path: "confirm-account/:token",
+          name: "confirm-account",
+          component: () => import("../views/auth/ConfirmAccountView.vue"),
+        },
+        {
+          path: "login",
+          name: "login",
+          component: () => import("../views/auth/LoginView.vue"),
         },
       ],
     },
