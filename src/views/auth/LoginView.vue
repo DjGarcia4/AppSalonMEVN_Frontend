@@ -39,8 +39,10 @@
 
 <script setup>
 import { inject } from "vue";
+import { useRouter } from "vue-router";
 import AuthAPI from "@/api/AuthAPI";
 
+const router = useRouter();
 const toast = inject("toast");
 const handleSubmit = async (formData) => {
   try {
@@ -48,6 +50,7 @@ const handleSubmit = async (formData) => {
       data: { token },
     } = await AuthAPI.login(formData);
     localStorage.setItem("AUTH_TOKEN", token);
+    router.push({ name: "my-appointmens" });
   } catch (error) {
     toast.open({ message: error.response.data.msg, type: "error" });
   }
