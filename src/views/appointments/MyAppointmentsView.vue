@@ -3,4 +3,8 @@
   <p class="text-white text-lg">Podras administrar tus proximas citas.</p>
 </template>
 
-<script setup></script>
+<script setup>
+import { useUserStore } from "@/stores/user.js";
+
+const user = useUserStore();
+</script>
