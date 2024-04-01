@@ -33,11 +33,15 @@
           v-model="appointments.date"
         />
       </div>
-      <div class="flex-1 grid grid-cols-1 md:grid-cols-2 gap-5 mt-10 lg:mt-0">
+      <div
+        v-if="appointments.isDateSelected"
+        class="flex-1 grid grid-cols-1 md:grid-cols-2 gap-5 mt-10 lg:mt-0"
+      >
         <button
+          :disabled="appointments.disbaleTime(hour) ? true : false"
           type="button"
           v-for="hour in appointments.hours"
-          class="block rounded-lg text-xl font-black p-3 hover:text-white hover:bg-blue-500 transition-all cursor-pointer"
+          class="block rounded-lg text-xl font-black p-3 hover:text-white hover:bg-blue-500 transition-all cursor-pointer disabled:opacity-10"
           @click="appointments.time = hour"
           :class="
             appointments.time === hour
