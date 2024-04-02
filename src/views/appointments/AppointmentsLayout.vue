@@ -18,12 +18,12 @@
           type="button"
           class="p-3 text-gray-200 uppercase text-xs font-black rounded-lg"
         >
-          My Appointments
+          Mis Citas
         </RouterLink>
         <RouterLink
           :to="{ name: 'new-appointment' }"
           class="p-3 text-gray-200 uppercase text-xs font-black rounded-lg bg-blue-600 hover:bg-blue-700 transition-colors"
-          >New Appointment</RouterLink
+          >Agendar Cita</RouterLink
         >
       </nav>
     </div>

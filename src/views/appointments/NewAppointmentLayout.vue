@@ -8,7 +8,7 @@
           ? 'bg-blue-600 text-white'
           : 'bg-white text-blue-500'
       "
-      >Services</RouterLink
+      >Servicios</RouterLink
     >
     <RouterLink
       :to="{ name: 'appointment-details' }"
@@ -18,7 +18,7 @@
           ? 'bg-blue-600 text-white'
           : 'bg-white text-blue-500'
       "
-      >Appointment and Summary</RouterLink
+      >Cita y Resumen</RouterLink
     >
   </nav>
   <main class="space-y-5">

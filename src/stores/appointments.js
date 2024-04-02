@@ -36,7 +36,7 @@ export const useAppointmentsStore = defineStore("appointments", () => {
       services.value = services.value.filter((srv) => srv._id !== service._id);
     } else {
       if (services.value.length === 2) {
-        alert("You can only select two services");
+        alert("Solo puedes seleccionar dos servicios");
       } else {
         services.value.push(service);
       }
