@@ -19,11 +19,13 @@
       }}</span>
     </p>
     <div class="flex gap-2 items-center">
-      <button
+      <RouterLink
         class="bg-slate-600 rounded-lg p-3 text-white text-sm uppercase font-black flex-1 md:flex-none"
+        :to="{ name: 'edit-appointment', params: { id: appointment._id } }"
       >
-        Editar Cita</button
+        Editar Cita</RouterLink
       ><button
+        @click="appointments.cancelAppointment(appointment._id)"
         class="bg-red-600 rounded-lg p-3 text-white text-sm uppercase font-black flex-1 md:flex-none"
       >
         Cancelar Cita
@@ -33,8 +35,13 @@
 </template>
 
 <script setup>
+import { useAppointmentsStore } from "@/stores/appointments";
+import { RouterLink } from "vue-router";
 import { displayDate } from "../helpers/date";
 import { formatCurrency } from "../helpers";
+
+const appointments = useAppointmentsStore();
+
 defineProps({
   appointment: {
     type: Object,

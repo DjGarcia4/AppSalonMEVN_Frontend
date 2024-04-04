@@ -55,11 +55,11 @@
     </div>
     <div v-if="appointments.isValidReservation" class="flex justify-end">
       <button
-        @click="appointments.createAppointment()"
+        @click="appointments.saveAppointment()"
         type="button"
         class="w-full md:w-auto bg-blue-500 p-3 rounded-lg uppercase font-black text-white hover:bg-blue-700 transition-all"
       >
-        Confirm Reservation
+        Confirmar Reservación
       </button>
     </div>
   </div>

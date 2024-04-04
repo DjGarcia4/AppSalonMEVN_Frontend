@@ -11,3 +11,8 @@ export function displayDate(date) {
   const formatteDate = format(newDate, "PPPP", { locale: es });
   return formatteDate;
 }
+export function convertToDDMMYYYY(isoDate) {
+  const newDate = new Date(isoDate);
+  const formatteDate = format(newDate, "dd/MM/yyyy");
+  return formatteDate;
+}

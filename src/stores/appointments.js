@@ -2,17 +2,20 @@ import { ref, computed, onMounted, watch } from "vue";
 import { useRouter } from "vue-router";
 import { defineStore } from "pinia";
 import AppointmentAPI from "@/api/AppointmentAPI";
-import { convertToISO } from "@/helpers/date.js";
+import { convertToISO, convertToDDMMYYYY } from "@/helpers/date.js";
 import { inject } from "vue";
+import { useUserStore } from "./user";
 
 export const useAppointmentsStore = defineStore("appointments", () => {
   const toast = inject("toast");
   const router = useRouter();
   const services = ref([]);
   const date = ref("");
+  const appointmentId = ref("");
   const time = ref("");
   const hours = ref([]);
   const appointmentsByDate = ref([]);
+  const user = useUserStore();
 
   onMounted(() => {
     const startHour = 10;
@@ -27,9 +30,24 @@ export const useAppointmentsStore = defineStore("appointments", () => {
     if (date.value === "") return;
     //Get Appointment
     const { data } = await AppointmentAPI.getByDate(date.value);
-    appointmentsByDate.value = data;
-    console.log(appointmentsByDate);
+    if (appointmentId.value) {
+      appointmentsByDate.value = data.filter(
+        (appointment) => appointment._id !== appointmentId.value
+      );
+      time.value = data.filter(
+        (appointment) => appointment._id === appointmentId.value
+      )[0].time;
+    } else {
+      appointmentsByDate.value = data;
+    }
   });
+
+  const setSelectedAppointment = (appointment) => {
+    services.value = appointment.services;
+    date.value = convertToDDMMYYYY(appointment.date);
+    time.value = appointment.time;
+    appointmentId.value = appointment._id;
+  };
 
   function onServiceSelected(service) {
     if (services.value.some((srv) => srv._id === service._id)) {
@@ -43,27 +61,53 @@ export const useAppointmentsStore = defineStore("appointments", () => {
     }
   }
 
-  async function createAppointment() {
+  async function saveAppointment() {
     const apointment = {
       services: services.value.map((srv) => srv._id),
       date: convertToISO(date.value),
       time: time.value,
       totalToPay: totalToPay.value,
     };
-    try {
-      const { data } = await AppointmentAPI.create(apointment);
-      toast.open({ message: data.msg, type: "success" });
-      router.push({ name: "my-appointmens" });
-      clearAppointmentData();
-    } catch (error) {
-      console.log(error);
+    if (appointmentId.value) {
+      try {
+        const { data } = await AppointmentAPI.update(
+          appointmentId.value,
+          apointment
+        );
+        toast.open({ message: data.msg, type: "success" });
+      } catch (error) {
+        console.log(error);
+      }
+    } else {
+      try {
+        const { data } = await AppointmentAPI.create(apointment);
+        toast.open({ message: data.msg, type: "success" });
+      } catch (error) {
+        console.log(error);
+      }
     }
+    router.push({ name: "my-appointmens" });
+    user.getAppointments();
+    clearAppointmentData();
   }
 
   function clearAppointmentData() {
+    appointmentId.value = "";
     services.value = [];
     date.value = "";
     time.value = "";
+  }
+
+  async function cancelAppointment(id) {
+    if (confirm("¿Deseas cancelar esta cita?")) {
+      try {
+        const { data } = await AppointmentAPI.delete(id);
+        toast.open({ message: data.msg, type: "success" });
+        user.getAppointments();
+      } catch (error) {
+        toast.open({ message: error.response.data.msg, type: "error" });
+      }
+    }
   }
 
   const isServiceSelected = computed(() => {
@@ -92,7 +136,10 @@ export const useAppointmentsStore = defineStore("appointments", () => {
   });
   return {
     onServiceSelected,
-    createAppointment,
+    saveAppointment,
+    setSelectedAppointment,
+    clearAppointmentData,
+    cancelAppointment,
     services,
     totalToPay,
     date,
