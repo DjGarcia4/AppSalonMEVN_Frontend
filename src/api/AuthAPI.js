@@ -16,4 +16,10 @@ export default {
   forgotPassword(data) {
     return api.post("/auth/forgot-password", data);
   },
+  verifyTokenPassword(token) {
+    return api.get(`/auth/forgot-password/${token}`);
+  },
+  changePassword(token, data) {
+    return api.post(`/auth/forgot-password/${token}`, data);
+  },
 };
